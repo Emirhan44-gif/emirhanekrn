@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Sayfası</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        input {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginContainer">
+        <h2>Giriş Yap</h2>
+        <input type="text" id="loginUser" placeholder="İsim Giriniz">
+        <input type="password" id="loginPassword" placeholder="Şifre">
+        <button onclick="login()">Giriş</button>
+        <p class="error" id="loginError" style="display: none;">Kayıtlı değilsiniz!</p>
+        <button onclick="showRegister()">Kayıt Ol</button>
+    </div>
+
+    <div class="container" id="registerContainer" style="display: none;">
+        <h2>Kayıt Ol</h2>
+        <input type="text" id="registerUser" placeholder="Kullanıcı Adı">
+        <input type="password" id="registerPassword" placeholder="Şifre">
+        <input type="password" id="registerConfirm" placeholder="Tekrar Şifre">
+        <button onclick="register()">Kayıt Ol</button>
+        <p class="error" id="registerError" style="display: none;">Şifreler uyuşmuyor!</p>
+    </div>
+
+    <script>
+        function playAlarmSound() {
+            const audio = new Audio('https://www.soundjay.com/button/beep-07.wav'); // Alarm sesi dosyasının URL'si
+            audio.play();
+        }
+
+        function login() {
+            playAlarmSound(); // Giriş sırasında alarm sesi çalar
+            const username = document.getElementById("loginUser").value;
+            const password = document.getElementById("loginPassword").value;
+
+            const storedPassword = localStorage.getItem(username); // localStorage'dan şifreyi al
+
+            if (storedPassword && storedPassword === password) {
+                showSocialPage(); // Başarılı giriş sonrası sosyal medya sayfasını göster
+            } else {
+                document.getElementById("loginError").style.display = "block";
+            }
+        }
+
+        function showRegister() {
+            document.getElementById("loginContainer").style.display = "none";
+            document.getElementById("registerContainer").style.display = "block";
+        }
+
+        function register() {
+            const username = document.getElementById("registerUser").value;
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword = document.getElementById("registerConfirm").value;
+
+            if (password === confirmPassword) {
+                localStorage.setItem(username, password); // Kullanıcıyı localStorage'a kaydet
+                document.getElementById("registerError").style.display = "none";
+                alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+                document.getElementById("registerContainer").style.display = "none";
+                document.getElementById("loginContainer").style.display = "block";
+            } else {
+                document.getElementById("registerError").style.display = "block";
+            }
+        }
+
+        function showSocialPage() {
+            document.body.innerHTML = `
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        background-color: #ffffff;
+                        margin: 0;
+                        flex-direction: column;
+                    }
+                    a {
+                        margin: 10px;
+                    }
+                    img {
+                        width: 100px;
+                        height: 100px;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    }
+                    img:hover {
+                        transform: scale(1.1);
+                    }
+                </style>
+                <a href="https://www.instagram.com/4emirhan4" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                </a>
+            `;
+        }
+    </script>
+</body>
+</html>
